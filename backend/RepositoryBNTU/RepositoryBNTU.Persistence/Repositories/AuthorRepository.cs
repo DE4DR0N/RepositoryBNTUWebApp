@@ -1,37 +1,48 @@
-﻿using RepositoryBNTU.Domain.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using RepositoryBNTU.Domain.Abstractions;
 using RepositoryBNTU.Domain.Entities;
 
 namespace RepositoryBNTU.Persistence.Repositories;
 
 public class AuthorRepository(RepositoryDbContext context) : IAuthorRepository
 {
-    public async Task<Author> GetByIdAsync(Guid id)
+    public async Task<Author?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await context.Authors
+            .Include(a => a.Publications)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task<IEnumerable<Author>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await context.Authors
+            .Include(a => a.Publications)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task AddAsync(Author entity)
     {
-        throw new NotImplementedException();
+        await context.Authors.AddAsync(entity);
     }
 
     public void Update(Author entity)
     {
-        throw new NotImplementedException();
+        context.Authors.Update(entity);
     }
 
     public void Delete(Author entity)
     {
-        throw new NotImplementedException();
+        context.Authors.Remove(entity);
     }
 
     public async Task<IEnumerable<Publication>> GetPublicationsByAuthorAsync(Guid authorId)
     {
-        throw new NotImplementedException();
+        return await context.Publications
+            .Include(p => p.Author)
+            .Where(p => p.AuthorId == authorId)
+            .AsNoTracking()
+            .ToListAsync();
     }
 }

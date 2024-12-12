@@ -1,42 +1,56 @@
-﻿using RepositoryBNTU.Domain.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using RepositoryBNTU.Domain.Abstractions;
 using RepositoryBNTU.Domain.Entities;
 
 namespace RepositoryBNTU.Persistence.Repositories;
 
 public class PublicationRepository(RepositoryDbContext context) : IPublicationRepository
 {
-    public async Task<Publication> GetByIdAsync(Guid id)
+    public async Task<Publication?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await context.Publications
+            .Include(p => p.Author)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task<IEnumerable<Publication>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await context.Publications
+            .Include(p => p.Author)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task AddAsync(Publication entity)
     {
-        throw new NotImplementedException();
+        await context.Publications.AddAsync(entity);
     }
 
     public void Update(Publication entity)
     {
-        throw new NotImplementedException();
+        context.Publications.Update(entity);
     }
 
     public void Delete(Publication entity)
     {
-        throw new NotImplementedException();
+        context.Publications.Remove(entity);
     }
 
-    public async Task<Publication> GetPublicationByIsbnAsync(string isbn)
+    public async Task<Publication?> GetPublicationByIsbnAsync(string isbn)
     {
-        throw new NotImplementedException();
+        return await context.Publications
+            .Include(p => p.Author)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.ISBN == isbn);
     }
 
     public async Task<IEnumerable<Publication>> GetPublicationsByCategoryAsync(Guid categoryId)
     {
-        throw new NotImplementedException();
+        return await context.Publications
+            .Include(p => p.Author)
+            .AsNoTracking()
+            .Where(p => p.CategoryId == categoryId)
+            .ToListAsync();
     }
 }

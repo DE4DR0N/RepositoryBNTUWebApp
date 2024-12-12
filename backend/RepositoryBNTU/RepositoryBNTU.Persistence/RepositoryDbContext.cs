@@ -48,6 +48,9 @@ public class RepositoryDbContext(DbContextOptions<RepositoryDbContext> options) 
         {
             user.HasKey(u => u.Id);
             user.HasIndex(u => u.Email).IsUnique();
+            user.Property(u => u.Email).IsRequired();
+            user.Property(u => u.PasswordHash).IsRequired();
+            user.Property(u => u.Role).IsRequired();
         });
     }
 }
