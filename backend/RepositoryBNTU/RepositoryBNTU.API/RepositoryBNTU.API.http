@@ -1,0 +1,6 @@
+@RepositoryBNTU.API_HostAddress = http://localhost:5222
+
+GET {{RepositoryBNTU.API_HostAddress}}/publications/
+Accept: application/json
+
+###
