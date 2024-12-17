@@ -1,6 +1,8 @@
-﻿namespace RepositoryBNTU.Application.Abstractions;
+﻿using RepositoryBNTU.Domain.Entities;
 
-public interface IAuthorService
+namespace RepositoryBNTU.Application.Abstractions;
+
+public interface IAuthorService : IGenericService<Author>
 {
-    
+    public Task<IEnumerable<Publication>> GetPublicationsByAuthorAsync(Guid authorId);
 }

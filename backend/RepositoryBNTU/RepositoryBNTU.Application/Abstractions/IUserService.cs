@@ -1,6 +1,9 @@
-﻿namespace RepositoryBNTU.Application.Abstractions;
+﻿using RepositoryBNTU.Domain.Entities;
 
-public interface IUserService
+namespace RepositoryBNTU.Application.Abstractions;
+
+public interface IUserService : IGenericService<User>
 {
-    
+    public Task<User?> GetByEmailAsync(string email);
+    public Task<IEnumerable<Publication>> GetPublicationsByUserAsync(Guid userId);
 }
