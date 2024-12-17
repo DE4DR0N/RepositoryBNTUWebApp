@@ -27,6 +27,7 @@ public class RepositoryDbContext(DbContextOptions<RepositoryDbContext> options) 
         modelBuilder.Entity<Publication>(publication =>
         {
             publication.HasKey(p => p.Id);
+            publication.HasIndex(p => p.Title).IsUnique();
             publication.HasIndex(p => p.ISBN).IsUnique();
             publication.Property(p => p.Title).HasMaxLength(100);
             publication.Property(p => p.Description).HasMaxLength(500);
