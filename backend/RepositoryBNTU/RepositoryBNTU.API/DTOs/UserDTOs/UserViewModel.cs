@@ -1,5 +1,3 @@
-﻿using RepositoryBNTU.API.DTOs.PublicationDTOs;
+﻿namespace RepositoryBNTU.API.DTOs.UserDTOs;
 
-namespace RepositoryBNTU.API.DTOs.UserDTOs;
-
-public record UserViewModel(Guid Id, string Email, string Password, string Role, List<PublicationViewModel> Publications);
+public record UserViewModel(Guid Id, string Email, string Role);

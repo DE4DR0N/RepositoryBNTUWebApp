@@ -1,4 +1,5 @@
 ﻿using RepositoryBNTU.API.DTOs.AuthorDTOs;
+using RepositoryBNTU.API.DTOs.CategoryDTOs;
 
 namespace RepositoryBNTU.API.DTOs.PublicationDTOs;
 

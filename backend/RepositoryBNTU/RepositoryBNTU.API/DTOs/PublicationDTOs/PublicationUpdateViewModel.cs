@@ -6,5 +6,5 @@ public record PublicationUpdateViewModel(
     string Description,
     string ISBN,
     DateOnly PublishDate,
-    string Author,
-    string Category);
+    Guid CategoryId,
+    Guid AuthorId);
