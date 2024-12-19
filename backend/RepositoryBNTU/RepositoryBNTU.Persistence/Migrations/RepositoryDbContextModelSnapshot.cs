@@ -118,6 +118,9 @@ namespace RepositoryBNTU.Persistence.Migrations
                     b.HasIndex("ISBN")
                         .IsUnique();
 
+                    b.HasIndex("Title")
+                        .IsUnique();
+
                     b.ToTable("Publications");
                 });
 

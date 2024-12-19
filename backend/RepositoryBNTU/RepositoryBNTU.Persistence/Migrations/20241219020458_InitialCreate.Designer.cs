@@ -12,7 +12,7 @@ using RepositoryBNTU.Persistence;
 namespace RepositoryBNTU.Persistence.Migrations
 {
     [DbContext(typeof(RepositoryDbContext))]
-    [Migration("20241212184125_InitialCreate")]
+    [Migration("20241219020458_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -119,6 +119,9 @@ namespace RepositoryBNTU.Persistence.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ISBN")
+                        .IsUnique();
+
+                    b.HasIndex("Title")
                         .IsUnique();
 
                     b.ToTable("Publications");

@@ -127,6 +127,12 @@ namespace RepositoryBNTU.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Publications_Title",
+                table: "Publications",
+                column: "Title",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PublicationUser_UsersFavoriteById",
                 table: "PublicationUser",
                 column: "UsersFavoriteById");
