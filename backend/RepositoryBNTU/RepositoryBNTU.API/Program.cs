@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RepositoryBNTU.API;
+using RepositoryBNTU.API.Middleware;
 using RepositoryBNTU.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
