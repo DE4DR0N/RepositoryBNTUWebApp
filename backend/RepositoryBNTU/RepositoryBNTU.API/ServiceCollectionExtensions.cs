@@ -29,6 +29,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPublicationService, PublicationService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<TokenService>();
 
         services.AddDbContext<RepositoryDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.AuthorDTOs;
 using RepositoryBNTU.Application.Abstractions;
@@ -37,6 +38,7 @@ public class AuthorsController : ControllerBase
         return Ok(authorViewModel);
     }
     
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost]
     public async Task<IActionResult> CreateAuthor([FromBody] AuthorCreateViewModel model)
     {
@@ -50,10 +52,11 @@ public class AuthorsController : ControllerBase
         return CreatedAtAction(nameof(GetAuthorById), new { id = author.Id }, author);
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateAuthor([FromRoute] Guid id, [FromBody] AuthorUpdateViewModel model)
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || id != model.Id)
         {
             return BadRequest(ModelState);
         }
@@ -63,6 +66,7 @@ public class AuthorsController : ControllerBase
         return Ok("Author updated successfully.");
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteAuthor([FromRoute] Guid id)
     {

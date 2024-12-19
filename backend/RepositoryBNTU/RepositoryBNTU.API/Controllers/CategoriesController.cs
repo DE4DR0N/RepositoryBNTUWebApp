@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.CategoryDTOs;
 using RepositoryBNTU.Application.Abstractions;
@@ -37,6 +38,7 @@ public class CategoriesController : ControllerBase
         return Ok(categoryViewModel);
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost]
     public async Task<IActionResult> CreateCategory([FromBody] CategoryCreateViewModel model)
     {
@@ -50,10 +52,11 @@ public class CategoriesController : ControllerBase
         return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateCategory([FromRoute]Guid id, [FromBody]CategoryUpdateViewModel model)
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || id != model.Id)
         {
             return BadRequest(ModelState);
         }
@@ -63,6 +66,7 @@ public class CategoriesController : ControllerBase
         return Ok("Category updated");
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
     {

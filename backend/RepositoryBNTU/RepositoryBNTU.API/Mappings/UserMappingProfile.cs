@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using RepositoryBNTU.API.DTOs.AuthorizationDTOs;
 using RepositoryBNTU.API.DTOs.UserDTOs;
 using RepositoryBNTU.Domain.Entities;
 
@@ -13,5 +14,7 @@ public class UserMappingProfile : Profile
         CreateMap<UserUpdateViewModel, User>()
             .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
         CreateMap<User, UserViewModel>();
+        CreateMap<AuthorizationViewModel, User>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
     }
 }

@@ -28,8 +28,10 @@ public class UserService : IUserService
 
     public async Task CreateAsync(User entity)
     {
-        var user = await _unitOfWork.Users.GetByIdAsync(entity.Id);
+        var user = await _unitOfWork.Users.GetByEmailAsync(entity.Email);
         if (user != null) throw new Exception("Conflict: User already exists");
+        
+        entity.PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(entity.PasswordHash);
         
         await _unitOfWork.Users.AddAsync(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -41,7 +43,9 @@ public class UserService : IUserService
         if (user == null) throw new KeyNotFoundException("User does not exist");
         
         var userToUpdate = await _unitOfWork.Users.GetByEmailAsync(entity.Email);
-        if (userToUpdate != null) throw new Exception($"User already exists");
+        if (userToUpdate != null) throw new Exception("Conflict: User already exists");
+        
+        entity.PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(entity.PasswordHash);
         
         _unitOfWork.Users.Update(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -59,7 +63,6 @@ public class UserService : IUserService
     public async Task<User?> GetByEmailAsync(string email)
     {
         var user = await _unitOfWork.Users.GetByEmailAsync(email);
-        if (user == null) throw new KeyNotFoundException("User does not exist");
         return user;
     }
 

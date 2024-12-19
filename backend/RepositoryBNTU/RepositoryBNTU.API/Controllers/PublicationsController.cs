@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.PublicationDTOs;
 using RepositoryBNTU.Application.Abstractions;
@@ -37,6 +38,7 @@ public class PublicationsController : ControllerBase
         return Ok(publicationViewModel);
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost]
     public async Task<IActionResult> CreatePublication([FromBody] PublicationCreateViewModel model)
     {
@@ -50,10 +52,11 @@ public class PublicationsController : ControllerBase
         return CreatedAtAction(nameof(GetPublicationById), new {id = publication.Id}, null);
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdatePublication([FromRoute] Guid id, [FromBody] PublicationUpdateViewModel model)
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || model.Id != id)
         {
             return BadRequest(ModelState);
         }
@@ -63,6 +66,7 @@ public class PublicationsController : ControllerBase
         return Ok("Publication updated");
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeletePublication([FromRoute] Guid id)
     {

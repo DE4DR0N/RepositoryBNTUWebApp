@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.UserDTOs;
 using RepositoryBNTU.Application.Abstractions;
@@ -7,6 +8,7 @@ using RepositoryBNTU.Domain.Entities;
 namespace RepositoryBNTU.API.Controllers;
 
 [ApiController]
+[Authorize(Policy = "AdminOnly")]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
@@ -53,7 +55,7 @@ public class UsersController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UserUpdateViewModel model)
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || id != model.Id)
         {
             return BadRequest(ModelState);
         }
