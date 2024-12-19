@@ -10,7 +10,6 @@ public class CategoryRepository(RepositoryDbContext context) : ICategoryReposito
     {
         return await context.Categories
             .AsNoTracking()
-            .Include(c => c.Publications)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 
@@ -18,7 +17,6 @@ public class CategoryRepository(RepositoryDbContext context) : ICategoryReposito
     {
         return await context.Categories
             .AsNoTracking()
-            .Include(c => c.Publications)
             .ToListAsync();
     }
 
@@ -41,7 +39,6 @@ public class CategoryRepository(RepositoryDbContext context) : ICategoryReposito
     {
         return await context.Categories
             .AsNoTracking()
-            .Include(c => c.Publications)
             .FirstOrDefaultAsync(c => c.Name == name);
     }
 }

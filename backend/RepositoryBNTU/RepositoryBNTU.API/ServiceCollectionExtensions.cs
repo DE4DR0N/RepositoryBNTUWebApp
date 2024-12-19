@@ -21,12 +21,14 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<IPublicationRepository, PublicationRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IAuthorService, AuthorService>();
         services.AddScoped<IPublicationService, PublicationService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ICategoryService, CategoryService>();
 
         services.AddDbContext<RepositoryDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));

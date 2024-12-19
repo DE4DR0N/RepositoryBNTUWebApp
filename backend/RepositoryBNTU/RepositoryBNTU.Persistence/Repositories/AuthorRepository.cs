@@ -9,7 +9,6 @@ public class AuthorRepository(RepositoryDbContext context) : IAuthorRepository
     public async Task<Author?> GetByIdAsync(Guid id)
     {
         return await context.Authors
-            .Include(a => a.Publications)
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id);
     }
@@ -17,7 +16,6 @@ public class AuthorRepository(RepositoryDbContext context) : IAuthorRepository
     public async Task<IEnumerable<Author>> GetAllAsync()
     {
         return await context.Authors
-            .Include(a => a.Publications)
             .AsNoTracking()
             .ToListAsync();
     }
