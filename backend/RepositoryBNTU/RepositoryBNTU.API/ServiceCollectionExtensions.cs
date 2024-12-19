@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RepositoryBNTU.API.Mappings;
 using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Application.Services;
 using RepositoryBNTU.Domain.Abstractions;
@@ -11,6 +12,12 @@ public static class ServiceCollectionExtensions
 {
     public static void AddProjectServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddAutoMapper(
+            typeof(AuthorMappingProfile),
+            typeof(CategoryMappingProfile),
+            typeof(PublicationMappingProfile),
+            typeof(UserMappingProfile));
+        
         services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<IPublicationRepository, PublicationRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
