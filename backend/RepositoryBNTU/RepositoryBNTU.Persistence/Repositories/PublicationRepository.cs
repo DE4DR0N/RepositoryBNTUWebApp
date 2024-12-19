@@ -10,6 +10,7 @@ public class PublicationRepository(RepositoryDbContext context) : IPublicationRe
     {
         return await context.Publications
             .Include(p => p.Author)
+            .Include(p => p.Category)
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id);
     }
@@ -18,6 +19,7 @@ public class PublicationRepository(RepositoryDbContext context) : IPublicationRe
     {
         return await context.Publications
             .Include(p => p.Author)
+            .Include(p => p.Category)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -41,6 +43,7 @@ public class PublicationRepository(RepositoryDbContext context) : IPublicationRe
     {
         return await context.Publications
             .Include(p => p.Author)
+            .Include(p => p.Category)
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.ISBN == isbn);
     }
