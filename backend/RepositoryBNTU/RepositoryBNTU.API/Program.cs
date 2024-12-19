@@ -52,6 +52,9 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<RepositoryDbContext>();
     dbContext.Database.Migrate();
+    
+    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    await AdminInitializer.InitializeAsync(scope.ServiceProvider, configuration);
 }
 
 app.UseRouting();
