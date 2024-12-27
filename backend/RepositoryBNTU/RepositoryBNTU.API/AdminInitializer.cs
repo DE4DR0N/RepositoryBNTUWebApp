@@ -19,7 +19,7 @@ public static class AdminInitializer
             var adminUser = new User
             {
                 Email = adminEmail, 
-                PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(adminPassword),
+                PasswordHash = adminPassword,
                 Role = adminRole
             };
             await userManager.CreateAsync(adminUser);
