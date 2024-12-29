@@ -69,6 +69,9 @@ public class UserService : IUserService
 
     public async Task<IEnumerable<Publication>> GetPublicationsByUserAsync(Guid userId)
     {
+        var user = await _unitOfWork.Users.GetByIdAsync(userId);
+        if (user == null) throw new KeyNotFoundException("User not found");
+        
         var publications = await _unitOfWork.Users.GetPublicationsByUserAsync(userId);
         return publications;
     }

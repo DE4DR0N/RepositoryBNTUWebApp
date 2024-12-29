@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.CategoryDTOs;
+using RepositoryBNTU.API.DTOs.PublicationDTOs;
 using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Entities;
 using RepositoryBNTU.Domain.Filters;
@@ -14,11 +15,13 @@ public class CategoriesController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly ICategoryService _categoryService;
+    private readonly IPublicationService _publicationService;
 
-    public CategoriesController(IMapper mapper, ICategoryService categoryService)
+    public CategoriesController(IMapper mapper, ICategoryService categoryService, IPublicationService publicationService)
     {
         _mapper = mapper;
         _categoryService = categoryService;
+        _publicationService = publicationService;
     }
 
     [HttpGet]
@@ -74,5 +77,14 @@ public class CategoriesController : ControllerBase
         await _categoryService.DeleteAsync(id);
         
         return NoContent();
+    }
+
+    [HttpGet("{id:guid}/publications")]
+    public async Task<IActionResult> GetPublicationsByCategory([FromRoute] Guid id)
+    {
+        var publications = await _publicationService.GetPublicationsByCategoryAsync(id);
+        var publicationViewModels = _mapper.Map<IEnumerable<PublicationViewModel>>(publications);
+        
+        return Ok(publicationViewModels);
     }
 }

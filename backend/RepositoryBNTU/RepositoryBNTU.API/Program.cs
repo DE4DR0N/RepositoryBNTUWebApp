@@ -39,6 +39,16 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("UserOnly", policy => policy.RequireRole("User"));
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policyBuilder =>
+        {
+            policyBuilder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddProjectServices(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
@@ -64,6 +74,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.MapControllers();
 

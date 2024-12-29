@@ -24,10 +24,10 @@ public class PublicationsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetPublications([FromQuery] PublicationFilter filter, [FromQuery] int? page, [FromQuery] int? pageSize)
     {
-        var publications = await _publicationService.GetAllAsync(filter, page, pageSize);
+        var (publications, totalPages) = await _publicationService.GetAllAsync(filter, page, pageSize);
         var publicationViewModels = _mapper.Map<IEnumerable<PublicationViewModel>>(publications);
         
-        return Ok(publicationViewModels);
+        return Ok(new { publicationViewModels, totalPages});
     }
 
     [HttpGet("{id:guid}")]
@@ -37,6 +37,15 @@ public class PublicationsController : ControllerBase
         var publicationViewModel = _mapper.Map<PublicationViewModel>(publication);
         
         return Ok(publicationViewModel);
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> GetPublications([FromQuery] string query)
+    {
+        var publications = await _publicationService.SearchAsync(query);
+        var publicationViewModels = _mapper.Map<IEnumerable<PublicationViewModel>>(publications);
+        
+        return Ok(publicationViewModels);
     }
 
     [Authorize(Policy = "AdminOnly")]

@@ -5,7 +5,8 @@ namespace RepositoryBNTU.Domain.Abstractions;
 
 public interface IPublicationRepository : IGenericRepository<Publication, PublicationFilter>
 {
-    public Task<IEnumerable<Publication>> GetAllAsync(PublicationFilter filter, int? skip, int? take);
+    Task<(IEnumerable<Publication> publications, int totalPages)> GetAllAsync(PublicationFilter filter, int? page, int? pageSize);
     public Task<Publication?> GetPublicationByIsbnAsync(string isbn);
     public Task<IEnumerable<Publication>> GetPublicationsByCategoryAsync(Guid categoryId);
+    public Task<IEnumerable<Publication>> SearchAsync(string searchTerm);
 }

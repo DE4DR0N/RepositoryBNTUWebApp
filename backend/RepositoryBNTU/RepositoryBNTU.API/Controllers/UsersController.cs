@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryBNTU.API.DTOs.PublicationDTOs;
 using RepositoryBNTU.API.DTOs.UserDTOs;
 using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Entities;
@@ -9,7 +10,7 @@ using RepositoryBNTU.Domain.Filters;
 namespace RepositoryBNTU.API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "AdminOnly")]
+[Authorize]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
@@ -72,5 +73,14 @@ public class UsersController : ControllerBase
         await _userService.DeleteAsync(id);
         
         return NoContent();
+    }
+
+    [HttpGet("{id:guid}/publications")]
+    public async Task<IActionResult> GetPublicationsByUser([FromRoute] Guid id)
+    {
+        var publications = await _userService.GetPublicationsByUserAsync(id);
+        var publicationViewModels = _mapper.Map<IEnumerable<PublicationViewModel>>(publications);
+        
+        return Ok(publicationViewModels);
     }
 }

@@ -27,15 +27,21 @@ public class PublicationRepository(RepositoryDbContext context) : IPublicationRe
             .ToListAsync();
     }
     
-    public async Task<IEnumerable<Publication>> GetAllAsync(PublicationFilter filter, int? skip, int? take)
+    public async Task<(IEnumerable<Publication> publications, int totalPages)> GetAllAsync(PublicationFilter filter, int? page, int? pageSize)
     {
-        return await context.Publications
+        var size = pageSize ?? 10;
+        var totalCount = await context.Publications.Filter(filter).CountAsync(); 
+        var totalPages = (int)Math.Ceiling(totalCount / (double)size);
+    
+        var publications = await context.Publications
             .Filter(filter)
-            .Paginate(skip, take)
+            .Paginate(page, pageSize)
             .Include(p => p.Author)
             .Include(p => p.Category)
             .AsNoTracking()
             .ToListAsync();
+
+        return (publications, totalPages);
     }
 
     public async Task AddAsync(Publication entity)
@@ -65,9 +71,26 @@ public class PublicationRepository(RepositoryDbContext context) : IPublicationRe
     public async Task<IEnumerable<Publication>> GetPublicationsByCategoryAsync(Guid categoryId)
     {
         return await context.Publications
+            .Include(p => p.Category)
             .Include(p => p.Author)
             .AsNoTracking()
             .Where(p => p.CategoryId == categoryId)
+            .ToListAsync();
+    }
+    
+    public async Task<IEnumerable<Publication>> SearchAsync(string searchTerm)
+    {
+        var lowerSearchTerm = searchTerm.ToLower();
+
+        return await context.Publications
+            .Include(p => p.Category)
+            .Include(p => p.Author)
+            .AsNoTracking()
+            .Where(p => p.Title.ToLower().Contains(lowerSearchTerm) ||
+                        p.Description.ToLower().Contains(lowerSearchTerm) ||
+                        p.Category.Name.ToLower().Contains(lowerSearchTerm) ||
+                        p.Author.FirstName.ToLower().Contains(lowerSearchTerm) ||
+                        p.Author.LastName.ToLower().Contains(lowerSearchTerm))
             .ToListAsync();
     }
 }

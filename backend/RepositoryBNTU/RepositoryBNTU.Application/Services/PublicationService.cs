@@ -27,9 +27,9 @@ public class PublicationService : IPublicationService
         return publications;
     }
     
-    public async Task<IEnumerable<Publication>> GetAllAsync(PublicationFilter filter, int? page, int? pageSize)
+    public async Task<(IEnumerable<Publication> publications, int totalPages)> GetAllAsync(PublicationFilter filter, int? page, int? pageSize)
     {
-        var publications = await _unitOfWork.Publications.GetAllAsync(filter);
+        var publications = await _unitOfWork.Publications.GetAllAsync(filter, page, pageSize);
         return publications;
     }
 
@@ -69,6 +69,12 @@ public class PublicationService : IPublicationService
     public async Task<IEnumerable<Publication>> GetPublicationsByCategoryAsync(Guid categoryId)
     {
         var publications = await _unitOfWork.Publications.GetPublicationsByCategoryAsync(categoryId);
+        return publications;
+    }
+
+    public async Task<IEnumerable<Publication>> SearchAsync(string searchTerm)
+    {
+        var publications = await _unitOfWork.Publications.SearchAsync(searchTerm);
         return publications;
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.AuthorDTOs;
+using RepositoryBNTU.API.DTOs.PublicationDTOs;
 using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Entities;
 using RepositoryBNTU.Domain.Filters;
@@ -30,7 +31,7 @@ public class AuthorsController : ControllerBase
         return Ok(authorsViewModel);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetAuthorById([FromRoute] Guid id)
     {
         var author = await _authorService.GetByIdAsync(id);
@@ -74,5 +75,14 @@ public class AuthorsController : ControllerBase
         await _authorService.DeleteAsync(id);
         
         return NoContent();
+    }
+
+    [HttpGet("{id:guid}/publications")]
+    public async Task<IActionResult> GetPublicationsByAuthor([FromRoute] Guid id)
+    {
+        var author = await _authorService.GetPublicationsByAuthorAsync(id);
+        var authorViewModel = _mapper.Map<IEnumerable<PublicationViewModel>>(author);
+        
+        return Ok(authorViewModel);
     }
 }

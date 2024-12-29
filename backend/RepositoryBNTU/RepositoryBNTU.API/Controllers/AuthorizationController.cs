@@ -55,6 +55,6 @@ public class AuthorizationController : ControllerBase
         
         HttpContext.Response.Cookies.Append("accessToken", accessToken, cookieOptions);
 
-        return Ok("User logged in");
+        return Ok(new { token = accessToken });
     }
 }

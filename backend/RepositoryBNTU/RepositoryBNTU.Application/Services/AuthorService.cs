@@ -53,6 +53,9 @@ public class AuthorService : IAuthorService
 
     public async Task<IEnumerable<Publication>> GetPublicationsByAuthorAsync(Guid authorId)
     {
+        var author = await _unitOfWork.Authors.GetByIdAsync(authorId);
+        if (author == null) throw new KeyNotFoundException("Author not found");
+        
         var publications = await _unitOfWork.Authors.GetPublicationsByAuthorAsync(authorId);
         return publications;
     }
