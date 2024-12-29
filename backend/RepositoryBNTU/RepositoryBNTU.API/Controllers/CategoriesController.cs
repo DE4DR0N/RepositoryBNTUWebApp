@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.CategoryDTOs;
 using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
 
 namespace RepositoryBNTU.API.Controllers;
 
@@ -21,9 +22,9 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCategories()
+    public async Task<IActionResult> GetCategories([FromQuery] CategoryFilter filter)
     {
-        var categories = await _categoryService.GetAllAsync();
+        var categories = await _categoryService.GetAllAsync(filter);
         var categoryViewModels = _mapper.Map<IEnumerable<CategoryViewModel>>(categories);
         
         return Ok(categoryViewModels);

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.PublicationDTOs;
 using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
 
 namespace RepositoryBNTU.API.Controllers;
 
@@ -21,9 +22,9 @@ public class PublicationsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetPublications()
+    public async Task<IActionResult> GetPublications([FromQuery] PublicationFilter filter, [FromQuery] int? page, [FromQuery] int? pageSize)
     {
-        var publications = await _publicationService.GetAllAsync();
+        var publications = await _publicationService.GetAllAsync(filter, page, pageSize);
         var publicationViewModels = _mapper.Map<IEnumerable<PublicationViewModel>>(publications);
         
         return Ok(publicationViewModels);

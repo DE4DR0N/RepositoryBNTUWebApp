@@ -1,6 +1,7 @@
 ﻿using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
 
 namespace RepositoryBNTU.Application.Services;
 
@@ -20,9 +21,9 @@ public class CategoryService : ICategoryService
         return category;
     }
 
-    public async Task<IEnumerable<Category>> GetAllAsync()
+    public async Task<IEnumerable<Category>> GetAllAsync(CategoryFilter filter)
     {
-        var categories = await _unitOfWork.Categories.GetAllAsync();
+        var categories = await _unitOfWork.Categories.GetAllAsync(filter);
         return categories;
     }
 

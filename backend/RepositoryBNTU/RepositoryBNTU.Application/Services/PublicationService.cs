@@ -1,6 +1,7 @@
 ﻿using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
 
 namespace RepositoryBNTU.Application.Services;
 
@@ -19,10 +20,16 @@ public class PublicationService : IPublicationService
         if (publication == null) throw new KeyNotFoundException();
         return publication;
     }
-
-    public async Task<IEnumerable<Publication>> GetAllAsync() // ПАГИНАЦИЯ
+    
+    public async Task<IEnumerable<Publication>> GetAllAsync(PublicationFilter filter)
     {
-        var publications = await _unitOfWork.Publications.GetAllAsync();
+        var publications = await _unitOfWork.Publications.GetAllAsync(filter);
+        return publications;
+    }
+    
+    public async Task<IEnumerable<Publication>> GetAllAsync(PublicationFilter filter, int? page, int? pageSize)
+    {
+        var publications = await _unitOfWork.Publications.GetAllAsync(filter);
         return publications;
     }
 

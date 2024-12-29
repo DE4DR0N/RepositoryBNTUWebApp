@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.AuthorDTOs;
 using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
 
 namespace RepositoryBNTU.API.Controllers;
 
@@ -21,9 +22,9 @@ public class AuthorsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAuthors()
+    public async Task<IActionResult> GetAuthors([FromQuery] AuthorFilter filter)
     {
-        var authors = await _authorService.GetAllAsync();
+        var authors = await _authorService.GetAllAsync(filter);
         var authorsViewModel = _mapper.Map<IEnumerable<AuthorViewModel>>(authors);
         
         return Ok(authorsViewModel);

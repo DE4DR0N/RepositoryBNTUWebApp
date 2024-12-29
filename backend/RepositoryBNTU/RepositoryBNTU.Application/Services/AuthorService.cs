@@ -1,6 +1,7 @@
 ﻿using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
 
 namespace RepositoryBNTU.Application.Services;
 
@@ -20,9 +21,9 @@ public class AuthorService : IAuthorService
         return author;
     }
 
-    public async Task<IEnumerable<Author>> GetAllAsync()
+    public async Task<IEnumerable<Author>> GetAllAsync(AuthorFilter filter)
     {
-        var authors = await _unitOfWork.Authors.GetAllAsync();
+        var authors = await _unitOfWork.Authors.GetAllAsync(filter);
         return authors;
     }
 

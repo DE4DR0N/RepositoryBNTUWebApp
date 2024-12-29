@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RepositoryBNTU.API.DTOs.UserDTOs;
 using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
 
 namespace RepositoryBNTU.API.Controllers;
 
@@ -22,9 +23,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetUsers()
+    public async Task<IActionResult> GetUsers([FromQuery] UserFilter filter)
     {
-        var users = await _userService.GetAllAsync();
+        var users = await _userService.GetAllAsync(filter);
         var userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users);
         
         return Ok(userViewModels);

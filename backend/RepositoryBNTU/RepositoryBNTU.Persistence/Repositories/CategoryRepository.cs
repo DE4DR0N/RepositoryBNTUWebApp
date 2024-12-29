@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RepositoryBNTU.Domain.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
+using RepositoryBNTU.Persistence.Extensions;
 
 namespace RepositoryBNTU.Persistence.Repositories;
 
@@ -13,9 +15,10 @@ public class CategoryRepository(RepositoryDbContext context) : ICategoryReposito
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public async Task<IEnumerable<Category>> GetAllAsync()
+    public async Task<IEnumerable<Category>> GetAllAsync(CategoryFilter filter)
     {
         return await context.Categories
+            .Filter(filter)
             .AsNoTracking()
             .ToListAsync();
     }

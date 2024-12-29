@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RepositoryBNTU.Domain.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
+using RepositoryBNTU.Persistence.Extensions;
 
 namespace RepositoryBNTU.Persistence.Repositories;
 
@@ -15,9 +17,21 @@ public class PublicationRepository(RepositoryDbContext context) : IPublicationRe
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<IEnumerable<Publication>> GetAllAsync()
+    public async Task<IEnumerable<Publication>> GetAllAsync(PublicationFilter filter)
     {
         return await context.Publications
+            .Filter(filter)
+            .Include(p => p.Author)
+            .Include(p => p.Category)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+    
+    public async Task<IEnumerable<Publication>> GetAllAsync(PublicationFilter filter, int? skip, int? take)
+    {
+        return await context.Publications
+            .Filter(filter)
+            .Paginate(skip, take)
             .Include(p => p.Author)
             .Include(p => p.Category)
             .AsNoTracking()

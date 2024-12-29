@@ -1,6 +1,7 @@
 ﻿using RepositoryBNTU.Application.Abstractions;
 using RepositoryBNTU.Domain.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
 
 namespace RepositoryBNTU.Application.Services;
 
@@ -20,9 +21,9 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
+    public async Task<IEnumerable<User>> GetAllAsync(UserFilter filter)
     {
-        var users = await _unitOfWork.Users.GetAllAsync();
+        var users = await _unitOfWork.Users.GetAllAsync(filter);
         return users;
     }
 

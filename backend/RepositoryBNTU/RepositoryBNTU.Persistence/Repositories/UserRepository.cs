@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RepositoryBNTU.Domain.Abstractions;
 using RepositoryBNTU.Domain.Entities;
+using RepositoryBNTU.Domain.Filters;
 
 namespace RepositoryBNTU.Persistence.Repositories;
 
@@ -11,7 +12,7 @@ public class UserRepository(RepositoryDbContext context) : IUserRepository
         return await context.Users.FindAsync(id);
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
+    public async Task<IEnumerable<User>> GetAllAsync(UserFilter filter)
     {
         return await context.Users
             .AsNoTracking()
