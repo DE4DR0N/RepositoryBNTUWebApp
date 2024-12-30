@@ -45,7 +45,7 @@ public class PublicationService : IPublicationService
         if (publication == null) throw new KeyNotFoundException("Publication not found");
 
         var publicationToUpdate = await _unitOfWork.Publications.GetPublicationByIsbnAsync(entity.ISBN);
-        if (publicationToUpdate != null) throw new Exception($"Publication with ISBN {entity.ISBN} already exists");
+        if (publicationToUpdate != null && publicationToUpdate.Id != publication.Id) throw new Exception($"Conflict: Publication with ISBN {entity.ISBN} already exists");
         
         _unitOfWork.Publications.Update(entity);
         await _unitOfWork.SaveChangesAsync();

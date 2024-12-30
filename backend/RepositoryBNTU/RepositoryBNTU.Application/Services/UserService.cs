@@ -44,7 +44,7 @@ public class UserService : IUserService
         if (user == null) throw new KeyNotFoundException("User does not exist");
         
         var userToUpdate = await _unitOfWork.Users.GetByEmailAsync(entity.Email);
-        if (userToUpdate != null) throw new Exception("Conflict: User already exists");
+        if (userToUpdate != null && user.Id != userToUpdate.Id) throw new Exception("Conflict: User already exists");
         
         entity.PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(entity.PasswordHash);
         

@@ -38,7 +38,7 @@ public class CategoryService : ICategoryService
         var category = await _unitOfWork.Categories.GetByIdAsync(entity.Id);
         if (category == null) throw new KeyNotFoundException("Category not found");
         var categoryToUpdate = await _unitOfWork.Categories.GetCategoryByNameAsync(entity.Name);
-        if (categoryToUpdate != null) throw new Exception($"Conflict: Category {entity.Name} already exists");
+        if (categoryToUpdate != null && category.Id != categoryToUpdate.Id) throw new Exception($"Conflict: Category {entity.Name} already exists");
         
         _unitOfWork.Categories.Update(category);
         await _unitOfWork.SaveChangesAsync();

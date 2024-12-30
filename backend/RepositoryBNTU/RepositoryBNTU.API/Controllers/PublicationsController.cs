@@ -66,11 +66,12 @@ public class PublicationsController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdatePublication([FromRoute] Guid id, [FromBody] PublicationUpdateViewModel model)
     {
-        if (!ModelState.IsValid || model.Id != id)
-        {
-            return BadRequest(ModelState);
-        }
+        // if (!ModelState.IsValid || model.Id != id)
+        // {
+        //     return BadRequest(ModelState);
+        // }
         var publication = _mapper.Map<Publication>(model);
+        publication.Id = id; // КОСТЫЛЬ
         await _publicationService.UpdateAsync(publication);
         
         return Ok("Publication updated");
