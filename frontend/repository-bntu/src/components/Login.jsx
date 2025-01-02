@@ -12,7 +12,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/authorization/login', { email, password });
+            const response = await axios.post('/api/auth/login', { email, password });
             const token = response.data.token;
             if (token) {
                 const payload = JSON.parse(atob(token.split('.')[1]));
