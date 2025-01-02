@@ -2,9 +2,11 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 using RepositoryBNTU.API;
 using RepositoryBNTU.API.Middleware;
 using RepositoryBNTU.Persistence;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(options =>
@@ -52,8 +54,32 @@ builder.Services.AddCors(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddProjectServices(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddSwaggerGen(opt => 
+{
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer"
+    });
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -69,19 +95,24 @@ using (var scope = app.Services.CreateScope())
 
 app.UseRouting();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger(opt =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    opt.RouteTemplate = "openapi/{documentName}.json";
+});
+app.MapScalarApiReference(opt =>
+{
+    opt.Title = "Repository API";
+    opt.Theme = ScalarTheme.Default;
+    opt.DefaultHttpClient = new(ScalarTarget.Http, ScalarClient.Http11);
+});
 
 app.UseCors("AllowAll");
 
-app.MapControllers();
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();
