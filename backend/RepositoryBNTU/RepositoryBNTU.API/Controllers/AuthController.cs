@@ -8,13 +8,13 @@ namespace RepositoryBNTU.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthorizationController : ControllerBase
+public class AuthController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly IAuthorizationService _authorizationService;
     private readonly IConfiguration _configuration;
 
-    public AuthorizationController(IAuthorizationService authorizationService, IMapper mapper, IConfiguration configuration)
+    public AuthController(IAuthorizationService authorizationService, IMapper mapper, IConfiguration configuration)
     {
         _authorizationService = authorizationService;
         _mapper = mapper;
